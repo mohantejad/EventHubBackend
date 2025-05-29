@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -64,6 +64,15 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+
 ROOT_URLCONF = 'main.urls'
 
 TEMPLATES = [
@@ -90,10 +99,10 @@ WSGI_APPLICATION = 'main.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'event_db',
-        'USER': 'event_db_user',
-        'PASSWORD': 'event_db_password',
-        'HOST': 'localhost',
+        'NAME': os.getenv('EVENT_DB_NAME', 'event_db'),
+        'USER': os.getenv('EVENT_DB_USER', 'event_db_user'),
+        'PASSWORD': os.getenv('EVENT_DB_PASSWORD', 'event_db_password'),
+        'HOST': os.getenv('EVENT_DB_HOST', 'localhost'),
         'PORT': '5432',
     }
 }
@@ -199,10 +208,11 @@ DJOSER = {
 }   
 
 # CORS settings
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
-    'http://127.0.0.1:3000'
-]
+# CORS_ALLOWED_ORIGINS = [
+#     'http://localhost:3000',
+#     'http://127.0.0.1:3000'
+# ]
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = [
     'accept',
